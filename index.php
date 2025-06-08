@@ -313,10 +313,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
         </div>
 
         <!-- Footer -->
-        <footer class="footer">
-            <div class="container text-center">
-                <p>&copy; 2025 Gantabya. All rights reserved.</p>
-            </div>
+        <footer >
+               <?php
+    include'C:\xampp\htdocs\blogphp\php-blog-website-main\inc\footer.php';
+    ?>
         </footer>
     </div>
 
@@ -341,10 +341,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
                 });
             });
         }
-
-
-        
-
         // Search Dropdown Logic for index.html
         const searchDropdowns = document.querySelectorAll('.search-input-group');
 

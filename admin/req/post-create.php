@@ -31,7 +31,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
        $image_temp = $_FILES['cover']['tmp_name'];
        $error = $_FILES['cover']['error']; 
        if ($error === 0) {
-           if ($image_size > 130000) {
+           if ($image_size > 230000) {
                $em = "Sorry, your file is too large."; 
                 header("Location: create_post.php?error=$em");
                 exit;
@@ -67,7 +67,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
       
      if ($res) {
           $sm = "Successfully Created!"; 
-          header("Location:create_post.php");
+          header("Location:blog.php");
           exit;
       }else {
         $em = "Unknown error occurred"; 

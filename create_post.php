@@ -28,7 +28,6 @@ $username = htmlspecialchars($_SESSION['username']);
 	?>       
 	 <div class="main-table">
 	 	<h3 class="mb-3">Create New Post
-	 	<a href="post.php" class="btn btn-secondary">Posts</a></h3>
 	 	<?php if (isset($_GET['error'])) { ?>	
 	 	<div class="alert alert-warning">
 			<?=htmlspecialchars($_GET['error'])?>

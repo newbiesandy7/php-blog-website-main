@@ -49,13 +49,13 @@ img {
 	opacity: .8;
 }
 .react-btns .like:hover  {
-	color: #0088FF;
+	color: #0C3B2E;
 }
 .react-btns .liked  {
-	color: #0088FF;
+	color: #0C3B2E;
 }
 .comments .comment span {
-   color: #0088FF;
+   color: #0C3B2E;
 }
 @media only screen and (max-width: 768px) {
   /* For mobile phones: */
