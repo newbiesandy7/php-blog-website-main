@@ -51,7 +51,7 @@ if (isset($_SESSION['admin_id']) && isset($_SESSION['username'])) {
 		  </thead>
 		  <tbody>
 		  	<?php foreach ($posts as $post) {
-		  	$category = getCategoryById($conn, $post['category']); 
+		  	$category = getCategoryById($conn, $post['category_id']); 
 		  	?>
 		    <tr>
 		      <th scope="row"><?=$post['post_id'] ?></th>

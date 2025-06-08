@@ -2,6 +2,8 @@
 session_start();
 require_once 'db_conn.php';
 if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
+	 $logged = true;
+	 $user_id = $_SESSION['user_id'];
  ?>
 <!DOCTYPE html>
 <html>
@@ -9,16 +11,16 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
 	<title>Dashboard - Create Post</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-	<link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/richtext.min.css">
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script type="text/javascript" src="../js/jquery.richtext.min.js"></script>
+	<link rel="stylesheet" href="css/style.css">
+   <link rel="stylesheet" href="css/richtext.min.css">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.richtext.min.js"></script>
 </head>
 <body>
 	<?php 
       $key = "hhdsfs1263z";
 	  include_once"admin/data/Category.php";
-      
+      include 'inc/Navbar.php';
       $categories = getAll($conn);
 
       $user_id = $_SESSION['user_id'];
@@ -26,7 +28,7 @@ $username = htmlspecialchars($_SESSION['username']);
 	?>       
 	 <div class="main-table">
 	 	<h3 class="mb-3">Create New Post
-	 		<a href="post.php" class="btn btn-secondary">Posts</a></h3>
+	 	<a href="post.php" class="btn btn-secondary">Posts</a></h3>
 	 	<?php if (isset($_GET['error'])) { ?>	
 	 	<div class="alert alert-warning">
 			<?=htmlspecialchars($_GET['error'])?>
@@ -82,8 +84,8 @@ $username = htmlspecialchars($_SESSION['username']);
 	</div>
 
 	 <script>
-	 	var navList = document.getElementById('navList').children;
-	 	navList.item(1).classList.add("active");
+	 	// var navList = document.getElementById('navList').children;
+	 	// navList.item(1).classList.add("active");
 
         $(document).ready(function() {
             $('.text').richText();
