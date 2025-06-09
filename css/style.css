@@ -1,71 +1,167 @@
-img {
-	max-width: 100%;
-}
-.main-banner {
-	width: 100%;
-	height: 50vh;
-	background: url("../img/welcome.jpg") center;
-	background-size: 100%;
-}
-.main-blog-card {
-	width: 90%;
-}
-.category-aside {
-	width: 100%;
-}
-.main-blog {
-	width: 70%;
-}
-.aside-main {
-	width: 30%;
+:root {
+    --primary-color: #6D9773;          /* Muted Green */
+    --dark-accent: #0C3B2E;            /* Dark Forest Green */
+    --button-color: #BB8A52;           /* Earthy Brown */
+    --highlight-color: #FFBA00;        /* Vibrant Yellow */
+    --text-color: #333;
+    --background-light: #f8f8f8;
+    --container-bg: #fff;
+    --border-color: #e0e0e0;
 }
 
-.w-450 {
-	width: 450px;
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--background-light);
+    color: var(--text-color);
 }
-.vh-100 {
-	min-height: 100vh;
+
+.container.mt-5 {
+    padding-top: 3rem;
 }
-/*admin*/
-.section-1 {
-	width: 100%;
-	padding: 15px;
+
+.main-blog {
+    flex: 3; /* Takes up more space */
+    margin-right: 20px;
 }
-.main-table {
-   width: 90%;
-   max-width: 700px;
+
+.main-blog h1 {
+    color: var(--dark-accent);
+    margin-bottom: 2rem;
 }
-.react-btns i {
-	font-size: 24px;
-	color: #222;
-	cursor: pointer;
+
+.main-blog-card {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease-in-out;
 }
-.react-btns a  {
-	text-decoration: none;
-	color: #222;
-	cursor: pointer;
+
+.main-blog-card:hover {
+    transform: translateY(-5px);
 }
-.react-btns a:hover  {
-	opacity: .8;
+
+.main-blog-card img {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    max-height: 250px; /* Adjust as needed */
+    object-fit: cover;
 }
-.react-btns .like:hover  {
-	color: #0C3B2E;
+
+.main-blog-card .card-body {
+    padding: 20px;
 }
-.react-btns .liked  {
-	color: #0C3B2E;
+
+.main-blog-card .card-title {
+    color: var(--dark-accent);
+    font-size: 1.75rem;
+    margin-top: 10px;
+    margin-bottom: 15px;
 }
-.comments .comment span {
-   color: #0C3B2E;
+
+.main-blog-card .card-text {
+    color: var(--text-color);
+    line-height: 1.6;
 }
-@media only screen and (max-width: 768px) {
-  /* For mobile phones: */
-  .aside-main {
-  	display: none;
-  }
-  .main-blog {
-	width: 100%;
-  }
-  .main-blog-card {
-	width: 100%;
+
+.main-blog-card span strong {
+    color: var(--primary-color);
 }
+
+.main-blog-card .btn-primary {
+    background-color: var(--button-color);
+    border-color: var(--button-color);
+    transition: background-color 0.3s ease;
+}
+
+.main-blog-card .btn-primary:hover {
+    background-color: var(--dark-accent);
+    border-color: var(--dark-accent);
+}
+
+.main-blog-card hr {
+    border-top: 1px solid var(--border-color);
+    margin: 15px 0;
+}
+
+.react-btns .fa {
+    margin-right: 5px;
+    color: var(--text-color); /* Default color for icons */
+}
+
+.react-btns .like-btn {
+    cursor: pointer;
+}
+
+.react-btns .liked {
+    color: var(--highlight-color); /* Highlight color for liked icon */
+}
+
+.react-btns a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.react-btns a:hover {
+    color: var(--primary-color);
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    color: #664d03;
+    padding: 1rem;
+    border-radius: 0.25rem;
+}
+
+/* Aside Section */
+.aside-main {
+    flex: 1; /* Takes up less space than main content */
+    padding-left: 20px; /* Space between main content and aside */
+}
+
+.category-aside {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden; /* Ensures rounded corners apply to children */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.category-aside .list-group-item.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    font-weight: bold;
+}
+
+.category-aside .list-group-item {
+    color: var(--text-color);
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.category-aside .list-group-item:last-child {
+    border-bottom: none;
+}
+
+.category-aside .list-group-item:hover {
+    background-color: var(--background-light);
+    color: var(--primary-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .d-flex {
+        flex-direction: column;
+    }
+
+    .main-blog, .aside-main {
+        margin-right: 0;
+        padding-left: 0;
+        width: 100%;
+    }
+
+    .aside-main {
+        margin-top: 2rem;
+    }
 }

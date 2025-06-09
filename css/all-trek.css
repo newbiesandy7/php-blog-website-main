@@ -27,7 +27,11 @@
             margin: 0 auto;
             padding: 20px;
         }
-
+.navbar {
+            background-color: var(--color-deep-green);
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
         /* Header (Placeholder - ensure consistency with other pages if needed) */
         header {
             background-color: var(--color-deep-green);

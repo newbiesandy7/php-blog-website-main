@@ -8,7 +8,7 @@ $message = '';
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     $message = "Invalid post ID.";
 } else {
-    $postId = (int)$_GET['id'];
+    $postId = (int) $_GET['id'];
 
     try {
         $stmt = $pdo->prepare("SELECT p.*, u.username FROM posts p JOIN users u ON p.user_id = u.id WHERE p.id = ?");
@@ -25,6 +25,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,10 +33,14 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     <style>
         /* Color Palette */
         :root {
-            --primary-color: #6D9773;      /* Muted Green */
-            --dark-accent: #0C3B2E;        /* Dark Forest Green */
-            --button-color: #BB8A52;       /* Earthy Brown */
-            --highlight-color: #FFBA00;    /* Vibrant Yellow */
+            --primary-color: #6D9773;
+            /* Muted Green */
+            --dark-accent: #0C3B2E;
+            /* Dark Forest Green */
+            --button-color: #BB8A52;
+            /* Earthy Brown */
+            --highlight-color: #FFBA00;
+            /* Vibrant Yellow */
             --text-color: #333;
             --background-light: #f8f8f8;
             --container-bg: #fff;
@@ -49,59 +54,71 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
             background-color: var(--background-light);
             color: var(--text-color);
         }
+
         .container {
             max-width: 800px;
             margin: 30px auto;
             padding: 30px;
             background-color: var(--container-bg);
             border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         }
+
         h2 {
             color: var(--dark-accent);
             margin-bottom: 10px;
             font-size: 2.5em;
             text-align: center;
         }
+
         .post-meta {
             font-size: 0.95em;
             color: #666;
             margin-bottom: 25px;
-            border-bottom: 1px solid var(--primary-color); /* Green divider */
+            border-bottom: 1px solid var(--primary-color);
+            /* Green divider */
             padding-bottom: 15px;
             text-align: center;
         }
+
         .post-meta span {
             margin: 0 15px;
         }
+
         .post-meta strong {
             color: var(--dark-accent);
         }
+
         .post-content {
             font-size: 1.1em;
             line-height: 1.9;
             color: #444;
             padding: 0 15px;
         }
+
         .back-link {
             display: block;
             margin-top: 40px;
             text-align: center;
         }
+
         .back-link a {
             display: inline-block;
             padding: 12px 22px;
-            background-color: var(--button-color); /* Back link uses earthy brown */
+            background-color: var(--button-color);
+            /* Back link uses earthy brown */
             color: white;
             text-decoration: none;
             border-radius: 6px;
             font-weight: bold;
             transition: background-color 0.3s ease, transform 0.2s ease;
         }
+
         .back-link a:hover {
             background-color: #A37546;
             transform: translateY(-2px);
         }
+
         .message.error {
             color: #D8000C;
             background-color: #FFEFEF;
@@ -112,6 +129,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
             text-align: center;
             font-weight: bold;
         }
+
         .post-actions {
             text-align: right;
             margin-top: 25px;
@@ -119,6 +137,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
             border-top: 1px solid #eee;
             padding-top: 15px;
         }
+
         .post-actions a {
             color: var(--primary-color);
             text-decoration: none;
@@ -126,18 +145,23 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
             font-weight: bold;
             transition: color 0.3s ease;
         }
+
         .post-actions a:hover {
             color: var(--dark-accent);
             text-decoration: underline;
         }
+
         .post-actions a.delete-link {
             color: #dc3545;
         }
+
         .post-actions a.delete-link:hover {
             color: #b02a37;
         }
     </style>
+    
 </head>
+
 <body>
     <div class="container">
         <?php if ($post): ?>
@@ -152,7 +176,8 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
             <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['user_id']): ?>
                 <div class="post-actions">
                     <a href="edit_post.php?id=<?php echo $post['id']; ?>">Edit Post</a> |
-                    <a href="delete_post.php?id=<?php echo $post['id']; ?>" class="delete-link" onclick="return confirm('Are you sure you want to delete this post?');">Delete Post</a>
+                    <a href="delete_post.php?id=<?php echo $post['id']; ?>" class="delete-link"
+                        onclick="return confirm('Are you sure you want to delete this post?');">Delete Post</a>
                 </div>
             <?php endif; ?>
         <?php else: ?>
@@ -166,4 +191,5 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
         </div>
     </div>
 </body>
+
 </html>

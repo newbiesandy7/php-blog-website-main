@@ -1,89 +1,119 @@
-<?php
-session_start();
-include 'C:\xampp\htdocs\blogphp\php-blog-website-main\db_conn.php';
-$logged = false;
-if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
-    $logged = true;
-    $user_id = $_SESSION['user_id'];
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Treks - Gantabya</title>
-      <link rel="stylesheet" href="css/nav.css">
-   	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merienda:wght@700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/all-trek.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Province Treks - Gantabya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merienda:wght@700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/all-trek.css"/>
+  <style>
+    body, html {
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  margin-bottom: 0;
+}
+    .hero {
+        background-image: url(/img/clouds.jpg);
+  height: 400px;                  /* Rectangular height */
+  width: 100%;                    /* Full width */
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Black overlay with 50% opacity */
+  z-index: 1;
+}
+
+.hero-overlay {
+  position: relative;
+  z-index: 2; /* Ensures text appears above the overlay */
+  text-align: center;
+  padding: 2rem;
+}
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .hero p {
+      font-size: 1.2rem;
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <div class="navbar">
+      <a href="/index.html" class="logo">Gantabya</a>
+      <button class="go-back-btn" onclick="history.back()">Go Back</button>
+    </div>
+  </header>
 
-<?php
-include 'inc/NavBar.php'; 
-?>
-    <main class="container">
-        <section class="search-filter-section">
-            <div class="search-input-group">
-                <i class="fas fa-search"></i>
-                <input type="text" id="search-input" placeholder="Search by name, location, or tag...">
-            </div>
-            <div class="filter-group">
-                <select id="difficulty-filter">
-                    <option value="">All Difficulties</option>
-                    <option value="easy">Easy</option>
-                    <option value="medium">Medium</option>
-                    <option value="hard">Hard</option>
-                </select>
-                <select id="duration-filter">
-                    <option value="">All Durations</option>
-                    <option value="1-7">1-7 Days</option>
-                    <option value="8-14">8-14 Days</option>
-                    <option value="15+">15+ Days</option>
-                </select>
-                <button id="apply-filters">Apply Filters</button>
-            </div>
-        </section>
+  <section class="hero">
+    <div class="hero-overlay">
+      <h1 id="province-name">Province Treks</h1>
+      <p id="province-quote">"Exploring the essence of nature, culture, and adventure."</p>
+    </div>
+  </section>
 
-        <section id="treks-listing" class="treks-grid">
-            </section>
+  <main class="container">
+    <section id="treks-listing" class="treks-grid"></section>
 
-        <div id="no-results" style="display: none;">
-            No treks found matching your criteria. Please try a different search or filter.
-        </div>
+    <div id="no-results" style="display: none;">No treks found matching your criteria.</div>
 
-        <section class="pagination-controls">
-            <button id="prev-page-button">Previous</button>
-            <div class="page-numbers" id="page-numbers-container">
-                </div>
-            <span id="pagination-info"></span>
-            <button id="next-page-button">Next</button>
-        </section>
-    </main>
+    <section class="pagination-controls">
+      <button id="prev-page-button">Previous</button>
+      <div class="page-numbers" id="page-numbers-container"></div>
+      <span id="pagination-info"></span>
+      <button id="next-page-button">Next</button>
+    </section>
+  </main>
 
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const treksGrid = document.getElementById('treks-listing');
-            const searchInput = document.getElementById('search-input');
-            const difficultyFilter = document.getElementById('difficulty-filter');
-            const durationFilter = document.getElementById('duration-filter');
-            const applyFiltersButton = document.getElementById('apply-filters');
-            const prevButton = document.getElementById('prev-page-button');
-            const nextButton = document.getElementById('next-page-button');
-            const pageNumbersContainer = document.getElementById('page-numbers-container');
-            const paginationInfo = document.getElementById('pagination-info');
-            const noResultsMessage = document.getElementById('no-results');
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const treksGrid = document.getElementById('treks-listing');
+      const prevButton = document.getElementById('prev-page-button');
+      const nextButton = document.getElementById('next-page-button');
+      const pageNumbersContainer = document.getElementById('page-numbers-container');
+      const paginationInfo = document.getElementById('pagination-info');
+      const noResultsMessage = document.getElementById('no-results');
 
-            let allOriginalTrekCards = []; // Store original trek data
-            let currentFilteredTreks = []; // Store treks after filtering and searching
-            let currentPage = 1;
-            const itemsPerPage = 9; // Display 9 cards per page
+      const urlParams = new URLSearchParams(window.location.search);
+      const selectedProvince = urlParams.get('province')?.toLowerCase() || '';
 
-            // Simulate fetching trek data (replace with actual API call if needed)
-            const fetchTrekData = () => {
+      // Set province name and quote
+      const provinceDisplayName = selectedProvince.charAt(0).toUpperCase() + selectedProvince.slice(1);
+      document.getElementById('province-name').textContent = provinceDisplayName + ' Province';
+      const provinceQuotes = {
+        bagmati: "Where culture meets nature and adventure begins.",
+        gandaki: "Gateway to the Himalayas and the soul of trekking.",
+        sudurpaschim: "Untouched beauty in the far west of Nepal.",
+        province1: "The land of mighty peaks and ancient trails.",
+        madhesh: "A blend of plains and tradition.",
+        lumbini: "Birthplace of the Buddha and serene paths.",
+        karnali: "Wild, remote, and wonderfully raw."
+      };
+      document.getElementById('province-quote').textContent = provinceQuotes[selectedProvince] || "Exploring the essence of nature, culture, and adventure.";
+
+      let allOriginalTrekCards = [];
+      let currentFilteredTreks = [];
+      let currentPage = 1;
+      const itemsPerPage = 9;
+
+      const fetchTrekData = () => {
                 return [
                     {
                         id: 1,
@@ -94,7 +124,8 @@ include 'inc/NavBar.php';
                         price: "75,000",
                         description: "A challenging trek to the foot of the world's highest peak, offering breathtaking views and Sherpa culture.",
                         difficulty: "hard",
-                        tags: ["adventure", "high altitude", "popular"]
+                        tags: ["adventure", "high altitude", "popular"],
+                        province: "province1" // Assign province here
                     },
                     {
                         id: 2,
@@ -105,7 +136,8 @@ include 'inc/NavBar.php';
                         price: "55,000",
                         description: "Diverse landscapes, from sub-tropical to alpine, with stunning views of Annapurna and Dhaulagiri ranges.",
                         difficulty: "medium",
-                        tags: ["adventure", "cultural", "recommended"]
+                        tags: ["adventure", "cultural", "recommended"],
+                        province: "gandaki" // Assign province here
                     },
                     {
                         id: 3,
@@ -116,7 +148,8 @@ include 'inc/NavBar.php';
                         price: "20,000",
                         description: "A relatively shorter trek offering close-up views of the Langtang Lirung and Ganesh Himal ranges.",
                         difficulty: "medium",
-                        tags: ["scenic", "cultural"]
+                        tags: ["scenic", "cultural"],
+                        province: "bagmati" // Assign province here
                     },
                     {
                         id: 4,
@@ -127,7 +160,8 @@ include 'inc/NavBar.php';
                         price: "25,000",
                         description: "Famous for its sunrise views over the Himalayas from Poon Hill, a relatively easy and short trek.",
                         difficulty: "easy",
-                        tags: ["short trek", "scenic"]
+                        tags: ["short trek", "scenic"],
+                        province: "gandaki" // Assign province here
                     },
                     {
                         id: 5,
@@ -138,7 +172,8 @@ include 'inc/NavBar.php';
                         price: "100,000",
                         description: "A restricted area trek offering raw Himalayan wilderness, diverse culture, and stunning mountain panoramas.",
                         difficulty: "hard",
-                        tags: ["adventure", "remote"]
+                        tags: ["adventure", "remote"],
+                        province: "gandaki" // Assign province here
                     },
                     {
                         id: 6,
@@ -149,7 +184,8 @@ include 'inc/NavBar.php';
                         price: "150,000",
                         description: "Journey into a forbidden kingdom, experiencing unique Tibetan Buddhist culture and arid landscapes.",
                         difficulty: "medium",
-                        tags: ["cultural", "unique", "restricted"]
+                        tags: ["cultural", "unique", "restricted"],
+                        province: "gandaki" // Assign province here
                     },
                     {
                         id: 7,
@@ -160,7 +196,8 @@ include 'inc/NavBar.php';
                         price: "180,000",
                         description: "An adventurous and challenging trek to the base of the world's third highest mountain.",
                         difficulty: "hard",
-                        tags: ["adventure", "remote", "challenging"]
+                        tags: ["adventure", "remote", "challenging"],
+                        province: "province1" // Assign province here
                     },
                     {
                         id: 8,
@@ -171,7 +208,8 @@ include 'inc/NavBar.php';
                         price: "130,000",
                         description: "Combines high passes, stunning viewpoints, and Everest Base Camp for the ultimate Himalayan experience.",
                         difficulty: "hard",
-                        tags: ["adventure", "high altitude", "challenging"]
+                        tags: ["adventure", "high altitude", "challenging"],
+                        province: "province1" // Assign province here
                     },
                     {
                         id: 9,
@@ -182,7 +220,8 @@ include 'inc/NavBar.php';
                         price: "45,000",
                         description: "A relatively new and less crowded trek offering spectacular close-up views of the Annapurna range.",
                         difficulty: "easy",
-                        tags: ["scenic", "short trek"]
+                        tags: ["scenic", "short trek"],
+                        province: "gandaki" // Assign province here
                     },
                     {
                         id: 10,
@@ -193,7 +232,8 @@ include 'inc/NavBar.php';
                         price: "70,000",
                         description: "Explore Nepal's largest lake, a pristine and serene destination in the remote Far West.",
                         difficulty: "medium",
-                        tags: ["remote", "nature"]
+                        tags: ["remote", "nature"],
+                        province: "karnali" // Assign province here
                     },
                     {
                         id: 11,
@@ -204,7 +244,8 @@ include 'inc/NavBar.php';
                         price: "250,000",
                         description: "A true wilderness expedition into one of the most isolated regions of Nepal, preserving ancient traditions.",
                         difficulty: "hard",
-                        tags: ["remote", "cultural", "expedition"]
+                        tags: ["remote", "cultural", "expedition"],
+                        province: "karnali" // Assign province here
                     },
                     {
                         id: 12,
@@ -215,7 +256,8 @@ include 'inc/NavBar.php';
                         price: "50,000",
                         description: "Offers stunning panoramic views of Everest, Kanchenjunga, Makalu, and other peaks, an off-the-beaten-path option.",
                         difficulty: "easy",
-                        tags: ["scenic", "short trek"]
+                        tags: ["scenic", "short trek"],
+                        province: "province1" // Assign province here
                     },
                     {
                         id: 13,
@@ -226,7 +268,8 @@ include 'inc/NavBar.php';
                         price: "95,000",
                         description: "A sacred Buddhist pilgrimage route in a hidden valley, offering unique cultural insights and untouched nature.",
                         difficulty: "medium",
-                        tags: ["cultural", "sacred", "remote"]
+                        tags: ["cultural", "sacred", "remote"],
+                        province: "gandaki" // Assign province here
                     },
                     {
                         id: 14,
@@ -237,7 +280,8 @@ include 'inc/NavBar.php';
                         price: "160,000",
                         description: "An adventurous trek to the base of the world's fifth highest mountain, known for its pristine wilderness.",
                         difficulty: "hard",
-                        tags: ["adventure", "remote", "challenging"]
+                        tags: ["adventure", "remote", "challenging"],
+                        province: "province1" // Assign province here
                     },
                     {
                         id: 15,
@@ -248,7 +292,8 @@ include 'inc/NavBar.php';
                         price: "160,000",
                         description: "Explore the walled city of Lo Manthang, the ancient capital of the Kingdom of Lo, in the arid trans-Himalayan region.",
                         difficulty: "medium",
-                        tags: ["cultural", "unique", "restricted"]
+                        tags: ["cultural", "unique", "restricted"],
+                        province: "gandaki" // Assign province here
                     },
                     {
                         id: 16,
@@ -259,7 +304,8 @@ include 'inc/NavBar.php';
                         price: "35,000",
                         description: "A popular pilgrimage trek to a sacred alpine lake, offering stunning mountain views and cultural experiences.",
                         difficulty: "medium",
-                        tags: ["pilgrimage", "scenic"]
+                        tags: ["pilgrimage", "scenic"],
+                        province: "bagmati" // Assign province here
                     },
                     {
                         id: 17,
@@ -270,7 +316,8 @@ include 'inc/NavBar.php';
                         price: "70,000",
                         description: "An off-the-beaten-path trek offering cultural immersion, pristine nature, and views of Ganesh Himal.",
                         difficulty: "medium",
-                        tags: ["cultural", "off-beat", "nature"]
+                        tags: ["cultural", "off-beat", "nature"],
+                        province: "bagmati" // Assign province here
                     },
                     {
                         id: 18,
@@ -281,7 +328,8 @@ include 'inc/NavBar.php';
                         price: "40,000",
                         description: "Experience the rich Tamang culture, traditional villages, and picturesque landscapes of the Langtang region.",
                         difficulty: "easy",
-                        tags: ["cultural", "village trek"]
+                        tags: ["cultural", "village trek"],
+                        province: "bagmati" // Assign province here
                     },
                     {
                         id: 19,
@@ -292,7 +340,8 @@ include 'inc/NavBar.php';
                         price: "45,000",
                         description: "A relatively short and easy trek close to Kathmandu, known for its Sherpa and Tamang villages and rhododendron forests.",
                         difficulty: "easy",
-                        tags: ["cultural", "short trek"]
+                        tags: ["cultural", "short trek"],
+                        province: "bagmati" // Assign province here
                     },
                     {
                         id: 20,
@@ -303,7 +352,8 @@ include 'inc/NavBar.php';
                         price: "60,000",
                         description: "An alternative to the Ghorepani trek, offering stunning panoramic views of the Annapurna and Dhaulagiri ranges.",
                         difficulty: "medium",
-                        tags: ["scenic", "less crowded"]
+                        tags: ["scenic", "less crowded"],
+                        province: "gandaki" // Assign province here
                     },
                     {
                         id: 21,
@@ -314,7 +364,8 @@ include 'inc/NavBar.php';
                         price: "200,000",
                         description: "A challenging and remote trek circumnavigating the world's seventh highest mountain, Dhaulagiri.",
                         difficulty: "hard",
-                        tags: ["expedition", "remote", "challenging"]
+                        tags: ["expedition", "remote", "challenging"],
+                        province: "gandaki" // Assign province here
                     },
                     {
                         id: 22,
@@ -325,7 +376,8 @@ include 'inc/NavBar.php';
                         price: "120,000",
                         description: "Explore hidden valleys and ancient Buddhist monasteries in this restricted area north of Annapurna.",
                         difficulty: "medium",
-                        tags: ["cultural", "restricted", "hidden gem"]
+                        tags: ["cultural", "restricted", "hidden gem"],
+                        province: "gandaki" // Assign province here
                     },
                     {
                         id: 23,
@@ -336,7 +388,8 @@ include 'inc/NavBar.php';
                         price: "20,000",
                         description: "A short and easy trek near Kathmandu, perfect for a quick escape with sunrise views over the Himalayas.",
                         difficulty: "easy",
-                        tags: ["short trek", "sunrise"]
+                        tags: ["short trek", "sunrise"],
+                        province: "bagmati" // Assign province here
                     },
                     {
                         id: 24,
@@ -347,7 +400,8 @@ include 'inc/NavBar.php';
                         price: "140,000",
                         description: "A challenging trek to the base of Mt. Api, offering wilderness and unique cultural experiences in a less-explored region.",
                         difficulty: "hard",
-                        tags: ["remote", "adventure", "challenging"]
+                        tags: ["remote", "adventure", "challenging"],
+                        province: "sudurpaschim" // Assign province here
                     },
                     {
                         id: 25,
@@ -358,7 +412,8 @@ include 'inc/NavBar.php';
                         price: "45,000",
                         description: "An eco-friendly community lodge trek offering stunning views of Dhaulagiri and Annapurna ranges.",
                         difficulty: "easy",
-                        tags: ["eco-friendly", "community", "scenic"]
+                        tags: ["eco-friendly", "community", "scenic"],
+                        province: "gandaki" // Assign province here
                     },
                     {
                         id: 26,
@@ -369,7 +424,8 @@ include 'inc/NavBar.php';
                         price: "230,000",
                         description: "A captivating journey into the mystical Lower Dolpo, visiting ancient monasteries like Shey Gompa and pristine landscapes.",
                         difficulty: "hard",
-                        tags: ["cultural", "remote", "spiritual"]
+                        tags: ["cultural", "remote", "spiritual"],
+                        province: "karnali" // Assign province here
                     },
                     {
                         id: 27,
@@ -380,7 +436,8 @@ include 'inc/NavBar.php';
                         price: "250,000",
                         description: "A highly challenging and technical pass linking the Khumbu and Hinku valleys, for experienced trekkers.",
                         difficulty: "hard",
-                        tags: ["expedition", "technical", "challenging"]
+                        tags: ["expedition", "technical", "challenging"],
+                        province: "province1" // Assign province here
                     },
                     {
                         id: 28,
@@ -391,7 +448,8 @@ include 'inc/NavBar.php';
                         price: "70,000",
                         description: "Discover the unique culture and traditions of the Limbu ethnic group in the hills of Eastern Nepal.",
                         difficulty: "medium",
-                        tags: ["cultural", "ethnic"]
+                        tags: ["cultural", "ethnic"],
+                        province: "province1" // Assign province here
                     },
                     {
                         id: 29,
@@ -402,7 +460,8 @@ include 'inc/NavBar.php';
                         price: "220,000",
                         description: "A remote and adventurous trek through the Rolwaling Valley, crossing the challenging Tashi Lapcha Pass.",
                         difficulty: "hard",
-                        tags: ["remote", "adventure", "challenging"]
+                        tags: ["remote", "adventure", "challenging"],
+                        province: "bagmati" // Assign province here
                     },
                     {
                         id: 30,
@@ -413,164 +472,105 @@ include 'inc/NavBar.php';
                         price: "25,000",
                         description: "Experience the unique lifestyle and culture of the indigenous Chepang people with stunning views of the plains and Himalayas.",
                         difficulty: "easy",
-                        tags: ["cultural", "village trek", "short trek"]
+                        tags: ["cultural", "village trek", "short trek"],
+                        province: "bagmati" // Assign province here
                     }
                 ];
             };
 
-            // Render a single trek card
-           // Render a single trek card
-            const createTrekCard = (trek) => {
-                const card = document.createElement('div');
-                card.className = 'trek-card';
-                card.innerHTML = `
-                    <img src="${trek.image}" alt="${trek.title}" class="trek-card-image">
-                    <div class="trek-card-content">
-                        <h3 class="trek-card-title">${trek.title}</h3>
-                        <div class="trek-card-info">
-                            <i class="fas fa-map-marker-alt"></i> ${trek.location}
-                        </div>
-                        <div class="trek-card-description">
-                            ${trek.description}
-                        </div>
-                        <div class="trek-card-tags">
-                            <span class="tag">${trek.difficulty.charAt(0).toUpperCase() + trek.difficulty.slice(1)}</span>
-                            ${trek.tags.map(tag => `<span class="tag">${tag.charAt(0).toUpperCase() + tag.slice(1)}</span>`).join('')}
-                        </div>
-                        <div class="trek-card-meta">
-                            <div>
-                                <span class="trek-card-duration"><i class="fas fa-clock"></i> ${trek.duration}</span>
-                                <span class="trek-card-price">NPR ${trek.price}</span>
-                            </div>
-                            <a href="individual.html?destination=${trek.id}" class="learn-more-button">Learn More</a>
-                        </div>
-                    </div>
-                `;
-                return card;
-            };
+      const createTrekCard = (trek) => {
+        const card = document.createElement('div');
+        card.className = 'trek-card';
+        card.innerHTML = `
+          <img src="${trek.image}" alt="${trek.title}" class="trek-card-image">
+          <div class="trek-card-content">
+            <h3 class="trek-card-title">${trek.title}</h3>
+            <div class="trek-card-info"><i class="fas fa-map-marker-alt"></i> ${trek.location}</div>
+            <div class="trek-card-description">${trek.description}</div>
+            <div class="trek-card-tags">
+              <span class="tag">${trek.difficulty.charAt(0).toUpperCase() + trek.difficulty.slice(1)}</span>
+              ${trek.tags.map(tag => `<span class="tag">${tag.charAt(0).toUpperCase() + tag.slice(1)}</span>`).join('')}
+            </div>
+            <div class="trek-card-meta">
+              <div>
+                <span class="trek-card-duration"><i class="fas fa-clock"></i> ${trek.duration}</span>
+                <span class="trek-card-price">NPR ${trek.price}</span>
+              </div>
+              <a href="individual.html?destination=${trek.id}" class="learn-more-button">Learn More</a>
+            </div>
+          </div>
+        `;
+        return card;
+      };
 
-            // Display treks for the current page with animation
-            const displayPage = (page) => {
-                currentPage = page;
-                treksGrid.innerHTML = ''; // Clear existing treks
-                noResultsMessage.style.display = 'none';
+      const displayPage = (page) => {
+        currentPage = page;
+        treksGrid.innerHTML = '';
+        noResultsMessage.style.display = 'none';
 
-                const startIndex = (currentPage - 1) * itemsPerPage;
-                const endIndex = startIndex + itemsPerPage;
-                const treksToDisplay = currentFilteredTreks.slice(startIndex, endIndex);
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const treksToDisplay = currentFilteredTreks.slice(startIndex, endIndex);
 
-                if (treksToDisplay.length === 0 && currentFilteredTreks.length > 0) {
-                    // If no treks on current page but there are filtered treks, go to last page
-                    currentPage = Math.ceil(currentFilteredTreks.length / itemsPerPage);
-                    if (currentPage > 0) { // Ensure current page is not 0 if no results
-                         displayPage(currentPage);
-                    } else { // No results at all
-                        noResultsMessage.style.display = 'block';
-                        updatePaginationControls(0);
-                    }
-                    return;
-                } else if (treksToDisplay.length === 0 && currentFilteredTreks.length === 0) {
-                    noResultsMessage.style.display = 'block';
-                }
+        if (treksToDisplay.length === 0 && currentFilteredTreks.length === 0) {
+          noResultsMessage.style.display = 'block';
+          return;
+        }
 
-                treksToDisplay.forEach((trek, index) => {
-                    const card = createTrekCard(trek);
-                    card.style.animationDelay = `${index * 0.08}s`; // Staggered fade-in
-                    treksGrid.appendChild(card);
-                });
-
-                updatePaginationControls(currentFilteredTreks.length);
-            };
-
-            // Update pagination buttons and info
-            const updatePaginationControls = (totalItems) => {
-                const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-                prevButton.disabled = currentPage === 1;
-                nextButton.disabled = currentPage === totalPages || totalPages === 0;
-
-                pageNumbersContainer.innerHTML = '';
-                for (let i = 1; i <= totalPages; i++) {
-                    const pageSpan = document.createElement('span');
-                    pageSpan.textContent = i;
-                    pageSpan.classList.add('page-number');
-                    if (i === currentPage) {
-                        pageSpan.classList.add('active');
-                    }
-                    pageSpan.addEventListener('click', () => displayPage(i));
-                    pageNumbersContainer.appendChild(pageSpan);
-                }
-
-                const displayedStart = totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
-                const displayedEnd = Math.min(currentPage * itemsPerPage, totalItems);
-                paginationInfo.textContent = `${displayedStart} - ${displayedEnd} of ${totalItems}`;
-
-                // Show/hide pagination controls based on total items
-                if (totalItems > 0) {
-                    prevButton.style.display = 'inline-block';
-                    nextButton.style.display = 'inline-block';
-                    pageNumbersContainer.style.display = 'flex';
-                    paginationInfo.style.display = 'block';
-                } else {
-                    prevButton.style.display = 'none';
-                    nextButton.style.display = 'none';
-                    pageNumbersContainer.style.display = 'none';
-                    paginationInfo.style.display = 'none';
-                }
-            };
-
-            // Apply search and filters
-            const applySearchAndFilters = () => {
-                const searchTerm = searchInput.value.toLowerCase().trim();
-                const selectedDifficulty = difficultyFilter.value;
-                const selectedDuration = durationFilter.value;
-
-                currentFilteredTreks = allOriginalTrekCards.filter(trek => {
-                    const matchesSearch = searchTerm === '' ||
-                                          trek.title.toLowerCase().includes(searchTerm) ||
-                                          trek.location.toLowerCase().includes(searchTerm) ||
-                                          trek.tags.some(tag => tag.toLowerCase().includes(searchTerm));
-
-                    const matchesDifficulty = selectedDifficulty === '' || trek.difficulty === selectedDifficulty;
-
-                    const trekDurationDays = parseInt(trek.duration.split(' ')[0]);
-                    const matchesDuration = selectedDuration === '' ||
-                                            (selectedDuration === '1-7' && trekDurationDays >= 1 && trekDurationDays <= 7) ||
-                                            (selectedDuration === '8-14' && trekDurationDays >= 8 && trekDurationDays <= 14) ||
-                                            (selectedDuration === '15+' && trekDurationDays >= 15);
-
-                    return matchesSearch && matchesDifficulty && matchesDuration;
-                });
-
-                currentPage = 1; // Reset to first page after filtering
-                displayPage(currentPage);
-            };
-
-            // Event listeners for Prev/Next buttons
-            prevButton.addEventListener('click', () => {
-                if (currentPage > 1) {
-                    displayPage(currentPage - 1);
-                }
-            });
-
-            nextButton.addEventListener('click', () => {
-                const totalPages = Math.ceil(currentFilteredTreks.length / itemsPerPage);
-                if (currentPage < totalPages) {
-                    displayPage(currentPage + 1);
-                }
-            });
-
-            // Event listeners for search and filter
-            searchInput.addEventListener('input', applySearchAndFilters);
-            applyFiltersButton.addEventListener('click', applySearchAndFilters);
-            difficultyFilter.addEventListener('change', applySearchAndFilters); // Apply on change
-            durationFilter.addEventListener('change', applySearchAndFilters); // Apply on change
-
-            // Initial load
-            allOriginalTrekCards = fetchTrekData();
-            currentFilteredTreks = [...allOriginalTrekCards]; // Initially all treks are filtered treks
-            displayPage(1);
+        treksToDisplay.forEach((trek, index) => {
+          const card = createTrekCard(trek);
+          card.style.animationDelay = `${index * 0.08}s`;
+          treksGrid.appendChild(card);
         });
-    </script>
+
+        updatePaginationControls(currentFilteredTreks.length);
+      };
+
+      const updatePaginationControls = (totalItems) => {
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        prevButton.disabled = currentPage === 1;
+        nextButton.disabled = currentPage === totalPages || totalPages === 0;
+
+        pageNumbersContainer.innerHTML = '';
+        for (let i = 1; i <= totalPages; i++) {
+          const pageSpan = document.createElement('span');
+          pageSpan.textContent = i;
+          pageSpan.classList.add('page-number');
+          if (i === currentPage) pageSpan.classList.add('active');
+          pageSpan.addEventListener('click', () => displayPage(i));
+          pageNumbersContainer.appendChild(pageSpan);
+        }
+
+        const displayedStart = totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+        const displayedEnd = Math.min(currentPage * itemsPerPage, totalItems);
+        paginationInfo.textContent = `${displayedStart} - ${displayedEnd} of ${totalItems}`;
+      };
+
+      prevButton.addEventListener('click', () => {
+        if (currentPage > 1) displayPage(currentPage - 1);
+      });
+
+      nextButton.addEventListener('click', () => {
+        const totalPages = Math.ceil(currentFilteredTreks.length / itemsPerPage);
+        if (currentPage < totalPages) displayPage(currentPage + 1);
+      });
+
+      allOriginalTrekCards = fetchTrekData();
+      currentFilteredTreks = allOriginalTrekCards.filter(trek =>
+        trek.province && trek.province.toLowerCase() === selectedProvince // Filter by the new 'province' property
+      );
+      displayPage(1);
+    });
+
+    function goBack() {
+  if (document.referrer !== "/index.html") {
+    // User has a referrer, go back to it
+    window.history.back();
+  } else {
+    // No referrer (user landed directly), redirect somewhere safe
+    window.location.href = '/';  // change to homepage or a fallback URL
+  }
+}
+  </script>
 </body>
 </html>
